@@ -26,22 +26,28 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
   {
     ROS_ERROR("CV_bridge exception: %s", ex.what());
   }
-
+ 
+  //These variables and paramter requests can/should be moved outside the loop:
   int low_threshold = 40;
   int ratio = 3; 
   int kernel_size = 3;
+  ros::NodeHandle nhPriv("~");
+  nhPriv.param<int>("low_threshold", low_threshold, 40);
+  nhPriv.param<int>("canny_ratio", ratio, 3);
+  nhPriv.param<int>("kernel_size", kernel_size, 3);
 
   Mat img;
+  //Convert image to grayscale:
   cvtColor(cv_ptr->image, img, CV_BGR2GRAY); // Convert to gray-scale image
   blur( img, img, Size(3,3));// Reduce noise with a kernel of 3x3
   Canny(img, img, low_threshold, low_threshold*ratio, kernel_size);
   cvtColor(img, img, CV_GRAY2BGR);
 
+  //Canny edge detect and publish image:
   cv_bridge::CvImage imgBridge = cv_bridge::CvImage(std_msgs::Header(), sensor_msgs::image_encodings::RGB8, img);
   sensor_msgs::Image canny_image;
   imgBridge.toImageMsg(canny_image);
   img_pub.publish(canny_image);
-
 }
 
 int main(int argc, char **argv)
