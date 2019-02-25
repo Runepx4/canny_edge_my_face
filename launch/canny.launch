@@ -1,0 +1,13 @@
+<launch>  
+
+    <node pkg="cv_camera" name="cv_camera" type="cv_camera_node">
+      <param name="device_id" value="0"/>
+    </node>
+
+    <node pkg="canny_edge_my_face" name="canny" type="canny_face"> 
+      <param name="low_threshold" value="20" type="int"/>
+      <param name="canny_ratio" value="3" type="int"/>
+      <param name="kernel_size" value="3" type="int"/>
+    </node>
+
+</launch>

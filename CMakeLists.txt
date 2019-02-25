@@ -24,3 +24,13 @@ include_directories(
 
 add_executable(canny_face src/canny_face.cpp)
 target_link_libraries(canny_face ${catkin_LIBRARIES})
+
+## Install canny_face
+install(TARGETS canny_face
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+# Install launch files
+install(DIRECTORY launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
